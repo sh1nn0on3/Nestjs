@@ -1,0 +1,22 @@
+# we create a Docker image from source
+version: "3.8"
+services:
+  ohayo:
+    image: postgres:15.0
+    container_name: ohayo
+    ports:
+      - '5432:5432' #{port_PC}:{container_port}
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ohayo
+    networks:
+      - ohayo-network
+networks:
+  ohayo-network:
+
+# NOTE
+# Create container , network  ,.. from docker-compose.yml
+#-d : deamon/background mode
+# docker compose up -d
+
