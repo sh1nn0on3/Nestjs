@@ -6,3 +6,6 @@
 ** Prisma
     - npm i -d prisma
     - npx prisma init
+    - npx prisma --help
+    - npx prisma migrate dev
+    - npx prisma studio
