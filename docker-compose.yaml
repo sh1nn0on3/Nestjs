@@ -1,5 +1,5 @@
 # we create a Docker image from source
-version: "3.8"
+version: '3.8'
 services:
   ohayo:
     image: postgres:15.0
@@ -14,9 +14,9 @@ services:
       - ohayo-network
 networks:
   ohayo-network:
-
-# NOTE
+# ~~~~~~~~~~~~~ NOTE ~~~~~~~~~~~~~
 # Create container , network  ,.. from docker-compose.yml
 #-d : deamon/background mode
 # docker compose up -d
+# docker compose down -d
 
