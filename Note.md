@@ -22,4 +22,16 @@
     <!-- tạo pipes global -->
     - app.useGlobalPipes(new ValidationPipe());
 
+** Config
+    - npm i @nestjs/config
+    - ConfigModule
+    - ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+    - 
 
+** JWT 
+    - npm i @nestjs/jwt 
+    - npm i @nestjs/passport passport
+    - npm i -D passport-jwt @types/passport-jwt
+
+** Strategy
+    - 
