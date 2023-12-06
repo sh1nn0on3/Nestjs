@@ -48,20 +48,36 @@ export class AuthService {
     return { message: `success`, accessToken, refreshToken };
   }
 
+  async getAll() {
+    const users = await this.prismaService.user.findMany();
+    return users;
+  }
+
+  async getUser(email: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return user;
+  }
+
   logout() {}
 
   async convertToAccessJwt(user: any) {
     const payload = { sub: user.id, ...user };
-    return this.jwtService.signAsync(payload, {
+    const token = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET_ACCESS'),
       expiresIn: `${this.configService.get('JWT_ACCESS_TIME')}`,
     });
+    return `Bearer ${token}`;
   }
   async convertToRefreshJwt(user: any) {
     const payload = { sub: user.id, email: user.email };
-    return this.jwtService.signAsync(payload, {
+    const token = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET_REFRESH'),
       expiresIn: `${this.configService.get('JWT_REFRESH_TIME')}`,
     });
+    return `Bearer ${token}`;
   }
 }

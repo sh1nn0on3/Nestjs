@@ -1,4 +1,8 @@
-** nest g --help 
+** nest 
+    - nest g controller user
+    - nest g module user
+    - nest g service user
+    - nest --help
 
 ** docker
     - -d : deamon/background mode
@@ -34,4 +38,12 @@
     - npm i -D passport-jwt @types/passport-jwt
 
 ** Strategy
-    - 
+    - create jwt.strategy.ts
+    - import ... providers (auth.module)
+    - authentication strategy using the ` Passport ` 
+        - Class Declaration
+        - Constructor
+            - super({ jwtFromRequest ,  ignoreExpiration , secretOrKey })
+    - @UseGuards(AuthGuard('jwt'))
+
+** 
