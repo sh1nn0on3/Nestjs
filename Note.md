@@ -26,7 +26,7 @@
     <!-- tạo pipes global -->
     - app.useGlobalPipes(new ValidationPipe());
 
-** Config
+** Config env
     - npm i @nestjs/config
     - ConfigModule
     - ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -44,6 +44,28 @@
         - Class Declaration
         - Constructor
             - super({ jwtFromRequest ,  ignoreExpiration , secretOrKey })
+        - Validate
     - @UseGuards(AuthGuard('jwt'))
 
-** 
+** Guard 
+    - 
+
+** Decorator
+
+
+** Swagger
+    - npm i @nestjs/swagger swagger-ui-express
+    - fix main.ts
+        -    const config = new DocumentBuilder()
+                .setTitle('Cats example')
+                .setDescription('The cats API description')
+                .setVersion('1.0')
+                .addTag('cats')
+                .build();
+            const document = SwaggerModule.createDocument(app, config);
+            SwaggerModule.setup('api', app, document);
+    - @ApiTags
+    - @ApiOkResponse
+    - @ApiBody
+    - @ApiCreatedResponse
+    - @ApiProperty

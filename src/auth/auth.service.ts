@@ -4,6 +4,7 @@ import { AuthDTO } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -17,15 +18,8 @@ export class AuthService {
     const hasdedPassword = await argon.hash(authDTO.password);
     try {
       const user = await this.prismaService.user.create({
-        data: {
-          email: authDTO.email,
-          password: hasdedPassword,
-        },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-        },
+        data: { email: authDTO.email, password: hasdedPassword },
+        select: { id: true, email: true, name: true },
       });
       return { message: `success`, user };
     } catch {
@@ -33,7 +27,7 @@ export class AuthService {
     }
   }
 
-  async login(authDTO: AuthDTO) {
+  async login(authDTO: AuthDTO, res: Response) {
     const user = await this.prismaService.user.findUnique({
       where: {
         email: authDTO.email,
@@ -45,21 +39,10 @@ export class AuthService {
     delete user.password;
     const accessToken = await this.convertToAccessJwt(user);
     const refreshToken = await this.convertToRefreshJwt(user);
-    return { message: `success`, accessToken, refreshToken };
-  }
-
-  async getAll() {
-    const users = await this.prismaService.user.findMany();
-    return users;
-  }
-
-  async getUser(email: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        email,
-      },
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
     });
-    return user;
+    return { message: `success`, accessToken: `Beares ${accessToken}` };
   }
 
   logout() {}
@@ -70,7 +53,7 @@ export class AuthService {
       secret: this.configService.get('JWT_SECRET_ACCESS'),
       expiresIn: `${this.configService.get('JWT_ACCESS_TIME')}`,
     });
-    return `Bearer ${token}`;
+    return token;
   }
   async convertToRefreshJwt(user: any) {
     const payload = { sub: user.id, email: user.email };
@@ -78,6 +61,6 @@ export class AuthService {
       secret: this.configService.get('JWT_SECRET_REFRESH'),
       expiresIn: `${this.configService.get('JWT_REFRESH_TIME')}`,
     });
-    return `Bearer ${token}`;
+    return token;
   }
 }
